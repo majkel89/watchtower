@@ -2,9 +2,9 @@ name: .NET
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -42,7 +42,7 @@ jobs:
         run: dotnet publish -c ${{ env.dotNetConfiguration }} -r linux-x64 --no-self-contained
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
+        run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
 
       - name: Coverage
         run: |
