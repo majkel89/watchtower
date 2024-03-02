@@ -1,5 +1,12 @@
 # Watchtower
 
+## Setup
+
+```shell
+dotnet tool restore
+dotnet restore
+```
+
 ## Requirements
 
  1. Scan common git repositories
