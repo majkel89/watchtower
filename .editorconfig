@@ -8,5 +8,8 @@ tab_width = 2
 indent_style = space
 trim_trailing_whitespace = true
 
-[*.{md,cs,json}]
+[*.{md,json,csproj}]
 indent_size = 2
+
+[*.cs]
+indent_size = 4

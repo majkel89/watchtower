@@ -1,0 +1,51 @@
+name: .NET
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '8.0.100' ]
+    env:
+      dotNetConfiguration: Release
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET Core ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Install Tools
+        run: dotnet tool restore
+
+      - name: Check formatting
+        run: dotnet format --verify-no-changes
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Check packages vulnerabilities
+        run: |
+          exec 5>&1
+          OUT=$(dotnet list package --include-transitive --vulnerable | tee /dev/fd/5)
+          if [[ $OUT =~ "has the following vulnerable packages" ]] ; then exit 1 ; fi
+
+      - name: Build
+        run: dotnet publish -c ${{ env.dotNetConfiguration }} -r linux-x64 --no-self-contained
+
+      - name: Test
+        run: dotnet test --no-restore --collect:"XPlat Code Coverage"
+
+      - name: Coverage
+        run: |
+          [[ $(echo "$(head test/HomeNet.Integration.Tests/TestResults/*/coverage.cobertura.xml -n 2 | tail -n 1 | awk '{print $2}' | cut -d'"' -f 2) > ${{ env.minimalCoverage }}" | bc) -gt 0 ]]
