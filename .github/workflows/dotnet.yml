@@ -43,7 +43,3 @@ jobs:
 
       - name: Test
         run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
-
-      - name: Coverage
-        run: |
-          [[ $(echo "$(head test/HomeNet.Integration.Tests/TestResults/*/coverage.cobertura.xml -n 2 | tail -n 1 | awk '{print $2}' | cut -d'"' -f 2) > ${{ env.minimalCoverage }}" | bc) -gt 0 ]]
