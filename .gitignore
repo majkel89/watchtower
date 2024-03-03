@@ -1,3 +1,9 @@
+### Neo4J
+/data
+/conf
+/import
+/logs
+
 ### DotnetCore template
 # .NET Core build folders
 bin/

@@ -7,6 +7,15 @@ dotnet tool restore
 dotnet restore
 ```
 
+### Setup Neo4j
+
+```shell
+chmod 640 neo4j.conf
+export USER_ID="$(id -u)"
+export GROUP_ID="$(id -g)"
+mkdir -p conf/server1 data/server1 import/server1 logs/server1
+```
+
 ## Requirements
 
  1. Scan common git repositories
