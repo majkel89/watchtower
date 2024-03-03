@@ -14,7 +14,10 @@ chmod 640 neo4j.conf
 export USER_ID="$(id -u)"
 export GROUP_ID="$(id -g)"
 mkdir -p conf/server1 data/server1 import/server1 logs/server1
+docker compose up
 ```
+
+Now you can visit neo4J browser at http://localhost:7474/.
 
 ## Requirements
 
