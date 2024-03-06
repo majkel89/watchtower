@@ -15,8 +15,7 @@ public sealed class GitLabIntegration(IGitLabClient client)
     {
         var groupQuery = new GroupQuery
         {
-            Sort = "full_path",
-            MinAccessLevel = AccessLevel.Reporter,
+            MinAccessLevel = AccessLevel.Reporter
         };
         await foreach (var group in client.Groups.GetAsync(groupQuery))
         {
@@ -24,7 +23,7 @@ public sealed class GitLabIntegration(IGitLabClient client)
             {
                 Archived = false,
                 IncludeSubGroups = true,
-                MinAccessLevel = AccessLevel.Reporter,
+                MinAccessLevel = AccessLevel.Reporter
             };
             await foreach (var project in client.Groups.GetProjectsAsync(group.Id, groupProjectsQuery))
             {
