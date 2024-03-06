@@ -1,7 +1,10 @@
 using Watchtower.Integrations.GitLab;
+using Watchtower.Playground;
 
-const string gitLabUrl = "https://gitlab.com/";
-const string gitLabToken = "***";
+DotEnv.Load(".env");
+
+var gitLabUrl = Environment.GetEnvironmentVariable("GITLAB_URL") ?? "https://gitlab.com/";
+var gitLabToken = Environment.GetEnvironmentVariable("GITLAB_TOKEN") ?? "***";
 
 var gitlab = GitLabIntegration.Create(gitLabUrl, gitLabToken);
 

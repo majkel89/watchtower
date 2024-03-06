@@ -1,4 +1,3 @@
-using System.Net;
 using NGitLab;
 using NGitLab.Models;
 using Project = Watchtower.Core.Project;
@@ -14,40 +13,21 @@ public sealed class GitLabIntegration(IGitLabClient client)
 
     public async IAsyncEnumerable<Project> ListProjectsAsync()
     {
-        var c = new ProjectQuery
+        var groupQuery = new GroupQuery
         {
-            Scope = ProjectQueryScope.Accessible,
-            Archived = false,
-            Simple = true,
-            Ascending = true,
-            OrderBy = "path",
-            PerPage = 10,
-            Search = "group = international"
+            Sort = "full_path",
+            MinAccessLevel = AccessLevel.Reporter,
         };
-
-        await foreach (var project in client.Projects.GetAsync(c))
+        await foreach (var group in client.Groups.GetAsync(groupQuery))
         {
-            var ret = false;
-            try
+            var groupProjectsQuery = new GroupProjectsQuery
             {
-                var treeSearch = new RepositoryGetTreeOptions
-                {
-                    Recursive = false,
-                };
-                await foreach (var file in client.GetRepository(project.Id).GetTreeAsync(treeSearch))
-                {
-                    Console.WriteLine($"\t {file.Path}");
-                }
-                ret = true;
-            }
-            catch (GitLabException e)
+                Archived = false,
+                IncludeSubGroups = true,
+                MinAccessLevel = AccessLevel.Reporter,
+            };
+            await foreach (var project in client.Groups.GetProjectsAsync(group.Id, groupProjectsQuery))
             {
-                if (e.StatusCode == HttpStatusCode.Forbidden)
-                    continue;
-                throw;
-            }
-
-            if (ret)
                 yield return new Project
                 {
                     Source = "GitLab",
@@ -57,6 +37,7 @@ public sealed class GitLabIntegration(IGitLabClient client)
                     Namespace = project.Namespace.FullPath,
                     GitUrl = project.SshUrl,
                 };
+            }
         }
     }
 }
