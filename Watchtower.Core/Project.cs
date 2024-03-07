@@ -8,4 +8,5 @@ public sealed class Project
     public required string GitUrl { get; init; }
     public required string Name { get; init; }
     public required string Namespace { get; init; }
+    public required IAsyncEnumerable<ProjectFile> Files { get; init; }
 }
