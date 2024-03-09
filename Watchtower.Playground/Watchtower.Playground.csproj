@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="GitLabApiClient" Version="1.8.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Yarnpkg.Yarn" Version="1.22.4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -46,3 +46,13 @@ Now you can visit neo4J browser at http://localhost:7474/.
  9. Allow to rate dependencies
 10. Allow to mark dependency as deprecated
 11. Visualise dependencies
+
+## Docs
+
+### node.js Yarn
+
+```shell
+# Parse yarn.lock to json
+# requires node.js and yarn package to be installed
+yarn list --json --silent --no-progress > yarn.json
+```
