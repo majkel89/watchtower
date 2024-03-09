@@ -39,7 +39,9 @@ jobs:
           if [[ $OUT =~ "has the following vulnerable packages" ]] ; then exit 1 ; fi
 
       - name: Build
-        run: dotnet publish -c ${{ env.dotNetConfiguration }} -r linux-x64 --no-self-contained
+        run: |
+          echo "" > .env
+          dotnet publish -c ${{ env.dotNetConfiguration }} -r linux-x64 --no-self-contained
 
       - name: Test
         run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
