@@ -56,3 +56,7 @@ Now you can visit neo4J browser at http://localhost:7474/.
 # requires node.js and yarn package to be installed
 yarn list --json --silent --no-progress > yarn.json
 ```
+
+### Checkin
+
+2024-03-10
