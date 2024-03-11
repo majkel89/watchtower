@@ -4,11 +4,11 @@ namespace Watchtower.Playground;
 
 public class Storage
 {
-    private string Root { get; }
+    public string Root { get; }
 
     public Storage(string root)
     {
-        Root = root;
+        Root = Path.GetFullPath(root.Replace("~", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
         Directory.CreateDirectory(root);
     }
 

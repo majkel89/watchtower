@@ -9,7 +9,7 @@ var dataRoot = Environment.GetEnvironmentVariable("STORAGE_DIR") ?? $"{Directory
 
 var storage = new Storage(dataRoot);
 
-Console.WriteLine($"String data to: {dataRoot}");
+Console.WriteLine($"String data to: {storage.Root}");
 
 var gitlab = GitLabIntegration.Create(gitLabUrl, gitLabToken);
 
