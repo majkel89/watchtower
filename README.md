@@ -47,6 +47,12 @@ Now you can visit neo4J browser at http://localhost:7474/.
 10. Allow to mark dependency as deprecated
 11. Visualise dependencies
 
+## Tasks
+
+ 1. Optimize repo scanning
+    1. use custom GitLab client
+    2. gitlab scanning infinite loop
+
 ## Docs
 
 ### node.js Yarn

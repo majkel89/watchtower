@@ -1,3 +1,6 @@
+### Solution
+/storage
+
 ### Neo4J
 /data
 /conf
@@ -417,3 +420,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+# Mac OS
+.DS_Store

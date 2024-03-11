@@ -12,7 +12,7 @@ public sealed class GitLabIntegration(IGitLabClient client)
         return new GitLabIntegration(new GitLabClient(url, privateToken));
     }
 
-    public async IAsyncEnumerable<Project> ListProjectsAsync()
+    public async IAsyncEnumerable<Project> ListProjectsAsync(int maxDepth = 2)
     {
         var groupQuery = new GroupQuery
         {
@@ -39,26 +39,28 @@ public sealed class GitLabIntegration(IGitLabClient client)
                     DefaultBranch = project.DefaultBranch,
                     Namespace = project.Namespace.FullPath,
                     GitUrl = project.SshUrl,
-                    Files = ScanTreeAsync(project.Id)
+                    Files = ScanTreeAsync(project.Id, maxDepth)
                 };
             }
         }
     }
 
-    private async IAsyncEnumerable<ProjectFile> ScanTreeAsync(int projectId, string path = "", int depth = 0, int maxDepth = 1)
+    private async IAsyncEnumerable<ProjectFile> ScanTreeAsync(int projectId, int maxDepth, string path = "", int depth = 0)
     {
         var treeOptions = new RepositoryGetTreeOptions
         {
             Path = path,
-            Recursive = false
+            Recursive = false,
+            PerPage = 100,
         };
-        await foreach (var file in client.GetRepository(projectId).GetTreeAsync(treeOptions))
+        var repository = client.GetRepository(projectId);
+        await foreach (var file in repository.GetTreeAsync(treeOptions))
         {
             switch (file.Type)
             {
                 case ObjectType.tree when depth < maxDepth:
                     {
-                        await foreach (var innerFile in ScanTreeAsync(projectId, file.Path, depth + 1, maxDepth))
+                        await foreach (var innerFile in ScanTreeAsync(projectId, maxDepth, file.Path, depth + 1))
                             yield return innerFile;
                         break;
                     }
@@ -72,5 +74,12 @@ public sealed class GitLabIntegration(IGitLabClient client)
                     }
             }
         }
+    }
+
+    public async Task<string> GetProjectFileAsync(Project project, ProjectFile file)
+    {
+        var repository = client.GetRepository(project.Id);
+        var fileData = await repository.Files.GetAsync(file.Path, project.DefaultBranch);
+        return System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(fileData.Content));
     }
 }
